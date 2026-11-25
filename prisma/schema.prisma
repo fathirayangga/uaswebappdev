@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Buku {
+  id           Int          @id @default(autoincrement())
+  judul        String
+  penulis      String
+  kategori     String
+  tahun        Int?
+  stokTotal    Int
+  stokTersedia Int
+  deskripsi    String?
+  createdAt    DateTime     @default(now())
+  peminjaman   Peminjaman[]
+}
+
+model Peminjaman {
+  id               Int       @id @default(autoincrement())
+  bukuId           Int
+  buku             Buku      @relation(fields: [bukuId], references: [id], onDelete: Cascade)
+  namaPeminjam     String
+  dipinjamPada     DateTime  @default(now())
+  dikembalikanPada DateTime?
+}
